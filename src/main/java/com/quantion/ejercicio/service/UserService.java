@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.quantion.ejercicio.entity.UserEntity;
+import com.quantion.ejercicio.mapper.UserMapper;
 import com.quantion.ejercicio.model.User;
 import com.quantion.ejercicio.repository.UserRepository;
 
@@ -27,23 +28,14 @@ public class UserService {
 	public List<User> getAllUsers() {
 
 		List<UserEntity> userEntityList = userRepository.findAll();
+		
+		return UserMapper.INSTANCE.userEntityListToUserList(userEntityList);
 
-		List<User> response = new ArrayList<>();
-
-		for (UserEntity userEntity : userEntityList) {
-			User user = new User();
-			BeanUtils.copyProperties(userEntity, user);
-			response.add(user);
-		}
-
-		return response;
 	}
 
 	public User save(User user) {
 
-		UserEntity entity = new UserEntity();
-
-		BeanUtils.copyProperties(user, entity, "password");
+		UserEntity entity =  UserMapper.INSTANCE.userToUserEntity(user);
 
 		try {
 			SecureRandom random = new SecureRandom();
@@ -59,10 +51,8 @@ public class UserService {
 		}
 
 		userRepository.save(entity);
-
-		BeanUtils.copyProperties(entity, user);
-
-		return user;
+		
+		return UserMapper.INSTANCE.userEntityToUser(entity);
 	}
 
 	public void deleteUser(Long id) {
@@ -75,12 +65,14 @@ public class UserService {
 
 		if (userEntityOpt.isPresent()) {
 
-			UserEntity userEntity = userEntityOpt.get();
-			BeanUtils.copyProperties(user, userEntity, "id");
+			UserEntity userEntityAux = userEntityOpt.get();
+			
+			UserEntity userEntity = UserMapper.INSTANCE.userToUserEntity(user);
+			userEntity.setId(id);
+			userEntity.setPassword(userEntityAux.getPassword());
 			userRepository.save(userEntity);
-			BeanUtils.copyProperties(userEntity, user);
 
-			return user;
+			return UserMapper.INSTANCE.userEntityToUser(userEntity);
 		}
 
 		return null;
