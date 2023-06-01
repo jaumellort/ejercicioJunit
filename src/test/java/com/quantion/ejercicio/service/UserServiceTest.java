@@ -51,13 +51,8 @@ public class UserServiceTest {
 	@Test
 	public void createUserTest() {
 
-		User user = new User();
-		user.setName("Name");
-		user.setSurname("Test");
-		user.setEmail("a@a.com");
-		user.setPassword("password");
-		user.setAge(1);
-		user.setActive(true);
+		User user = User.builder().name("Name").surname("Test").email("a@a.com").password("pass").age(1).active(false)
+				.build();
 
 		UserEntity userEntity = new UserEntity();
 		userEntity.setName("Name");
@@ -78,24 +73,18 @@ public class UserServiceTest {
 	@Test
 	public void updateUserTest() {
 
-		User user = new User();
-		user.setId(1L);
-		user.setName("Name");
-		user.setSurname("Test");
-		user.setEmail("a@a.com");
-		user.setPassword("password");
-		user.setAge(1);
-		user.setActive(true);
-		
+		User user = User.builder().name("Name").surname("Test").email("a@a.com").password("pass").age(1).active(false)
+				.build();
+
 		UserEntity userEntity = new UserEntity();
-		user.setId(1L);
+		userEntity.setId(1L);
 		userEntity.setName("Name");
 		userEntity.setSurname("Test");
 		userEntity.setEmail("a@a.com");
 		userEntity.setPassword("password");
 		userEntity.setAge(1);
 		userEntity.setActive(true);
-
+		
 		Optional<UserEntity> userEntityOpt = Optional.ofNullable(userEntity);
 
 		doReturn(userEntityOpt).when(this.userRepository).findById(Mockito.any(Long.class));
@@ -111,13 +100,8 @@ public class UserServiceTest {
 	@Test
 	public void updateUserNotExistingTest() {
 
-		User user = new User();
-		user.setId(1L);
-		user.setName("Name");
-		user.setSurname("Test");
-		user.setEmail("a@a.com");
-		user.setAge(1);
-		user.setActive(true);
+		User user = User.builder().name("Name").surname("Test").email("a@a.com").password("pass").age(1).active(false)
+				.build();
 
 		Optional<User> userEntityOpt = Optional.ofNullable(null);
 

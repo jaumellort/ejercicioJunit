@@ -70,7 +70,7 @@ public class UserService {
 	}
 
 	public User updateUser(Long id, User user) {
-
+		
 		Optional<UserEntity> userEntityOpt = userRepository.findById(id);
 
 		if (userEntityOpt.isPresent()) {
